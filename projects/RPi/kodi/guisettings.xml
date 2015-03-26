@@ -1,0 +1,7 @@
+<audiooutput>
+    <audiodevice>ALSA:@</audiodevice>
+</audiooutput>
+<lookandfeel>
+    <enablerssfeeds>false</enablerssfeeds>
+</lookandfeel>
+
