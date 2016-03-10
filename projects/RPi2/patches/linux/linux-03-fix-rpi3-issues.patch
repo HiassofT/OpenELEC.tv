@@ -1,0 +1,52 @@
+From cdcb5f1a6a9c4e0f31717dfd1216959021bed2e3 Mon Sep 17 00:00:00 2001
+From: DigitalDreamtime <clive.messer@digitaldreamtime.co.uk>
+Date: Fri, 11 Mar 2016 11:44:35 +0000
+Subject: [PATCH 1/2] Remove I2S config from bt_pins.
+
+Remove I2S config from bt_pins. Causes issues with clock alignment when I2S is
+used by an external DAC via GPIO header.
+---
+ arch/arm/boot/dts/bcm2710-rpi-3-b.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/bcm2710-rpi-3-b.dts b/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
+index 5074c88..59a10fc 100644
+--- a/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
++++ b/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
+@@ -39,9 +39,9 @@
+ 	};
+ 
+ 	bt_pins: bt_pins {
+-		brcm,pins =     <28 29 30 31 43>;
+-		brcm,function = <6 6 6 6 4>;   /* alt2:PCM alt0:GPCLK2 */
+-		brcm,pull =     <0 0 0 0 0>;
++		brcm,pins = <43>;
++		brcm,function = <4>; /* alt0:GPCLK2 */
++		brcm,pull = <0>;
+ 	};
+ 
+ 	uart0_pins: uart0_pins {
+
+From a2f6596ecf0696f36178c8fa11876ca0e8165446 Mon Sep 17 00:00:00 2001
+From: Matthias Reichl <hias@horus.com>
+Date: Fri, 11 Mar 2016 13:39:42 +0100
+Subject: [PATCH 2/2] cirrus temp fix: switch to spi-bcm2708 to save DMA
+ channels
+
+---
+ arch/arm/boot/dts/bcm2710-rpi-3-b.dts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/bcm2710-rpi-3-b.dts b/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
+index 59a10fc..75f2924 100644
+--- a/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
++++ b/arch/arm/boot/dts/bcm2710-rpi-3-b.dts
+@@ -100,6 +100,8 @@
+ };
+ 
+ &spi0 {
++	/* use bcm2708-spi to save DMA channels */
++	compatible = "brcm,bcm2708-spi";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&spi0_pins>;
+ 	cs-gpios = <0 0>;
